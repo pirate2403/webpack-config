@@ -21,3 +21,17 @@ export interface WebpackPaths {
   COPY_STATIC_FROM_PATH: string;
   COPY_STATIC_TO_PATH: string;
 }
+
+export interface MfSharedConfig {
+  eager?: boolean;
+  requiredVersion?: string;
+  singleton?: boolean;
+}
+
+export interface MfPluginParams {
+  name: string;
+  filename: string;
+  exposes?: Record<string, string>;
+  remotes?: Record<string, string>;
+  shared?: Record<string, MfSharedConfig>;
+}
