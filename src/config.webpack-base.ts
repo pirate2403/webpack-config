@@ -11,10 +11,7 @@ import {
   getPort,
   resolvePath,
 } from "./config.helpers";
-import {
-  WebpackConfig,
-  WebpackOverridesConfig
-} from "./config.types";
+import { WebpackConfig, WebpackOverridesConfig } from "./config.types";
 
 export function createWebpackConfigBase(
   dirName: string,
@@ -29,7 +26,7 @@ export function createWebpackConfigBase(
     mode,
     entry: resolvePath(dirName, paths.ENTRY_PATH),
     output: {
-      publicPath: resolvePath(dirName, paths.PUBLIC_PATH),
+      publicPath: paths.PUBLIC_PATH,
       path: resolvePath(dirName, paths.OUTPUT_PATH),
       filename: isDev ? "script/[name].js" : "script/[name].[contenthash].js",
       clean: true,
@@ -49,10 +46,7 @@ export function createWebpackConfigBase(
         ],
       }),
       ...(isDev
-        ? [
-            new ReactRefreshWebpackPlugin(),
-            new ForkTsCheckerWebpackPlugin(),
-          ]
+        ? [new ReactRefreshWebpackPlugin(), new ForkTsCheckerWebpackPlugin()]
         : []),
     ],
     module: {
@@ -86,15 +80,17 @@ export function createWebpackConfigBase(
         "@": resolvePath(dirName, "src"),
       },
     },
-    ...(isDev && {
-      devtool: "cheap-module-source-map",
-      devServer: {
-        historyApiFallback: true,
-        static: { directory: resolvePath(dirName, paths.DEV_STATIC_PATH) },
-        port: port,
-        hot: true,
-      },
-    }),
+    devtool: isDev ? "cheap-module-source-map" : "hidden-source-map",
+    ...(isDev
+      ? {
+          devServer: {
+            historyApiFallback: true,
+            static: { directory: resolvePath(dirName, paths.DEV_STATIC_PATH) },
+            port: port,
+            hot: true,
+          },
+        }
+      : {}),
   };
 
   return {
