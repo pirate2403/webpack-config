@@ -25,4 +25,8 @@ export const MODE = {
   DEV: "development",
 } as const;
 
-export const COMMON_DEPENDENCIES = ["react", "react-dom", "react-router-dom"] as const;
+export const COMMON_DEPENDENCIES = [
+  "react",
+  "react-dom",
+  "react-router-dom",
+] as const;

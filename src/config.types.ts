@@ -32,5 +32,5 @@ export interface MfPluginParams {
   filename?: string;
   exposes?: Record<string, string>;
   remotes?: Record<string, string>;
-  shared?: Record<string, MfSharedConfig>;
+  shared?: string[];
 }

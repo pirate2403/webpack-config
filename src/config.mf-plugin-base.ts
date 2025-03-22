@@ -8,7 +8,12 @@ export function createWebpackMfPluginBase(
   dirName: string,
   params: MfPluginParams
 ) {
-  const { remotes = {}, filename = MF_FILE_NAME, ...restParams } = params;
+  const {
+    remotes = {},
+    filename = MF_FILE_NAME,
+    shared = [],
+    ...restParams
+  } = params;
   const packageJson = JSON.parse(
     fs.readFileSync(path.resolve(dirName, "package.json"), "utf-8")
   );
@@ -16,17 +21,18 @@ export function createWebpackMfPluginBase(
   const dependencies = packageJson.dependencies ?? {};
 
   return new webpack.container.ModuleFederationPlugin({
-    shared: COMMON_DEPENDENCIES.reduce<Record<string, MfSharedConfig>>(
-      (acc, dep) => ({
-        ...acc,
-        [dep]: {
+    shared: [...COMMON_DEPENDENCIES, ...shared].reduce<
+      Record<string, MfSharedConfig>
+    >((acc, dep) => {
+      if (dependencies[dep]) {
+        acc[dep] = {
           singleton: true,
           eager: true,
           requiredVersion: dependencies[dep],
-        },
-      }),
-      {}
-    ),
+        };
+      }
+      return acc;
+    }, {}),
     remotes: Object.keys(remotes).reduce<Record<string, string>>(
       (acc, name) => ({
         ...acc,
