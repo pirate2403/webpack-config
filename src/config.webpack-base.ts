@@ -31,7 +31,7 @@ export function createWebpackConfigBase(
     entry: resolvePath(dirName, paths.ENTRY_PATH),
     output: {
       path: resolvePath(dirName, paths.OUTPUT_PATH),
-      filename: "script/[name].[contenthash].js",
+      filename: isDev ? "script/[name].js" : "script/[name].[contenthash].js",
       clean: true,
     },
     plugins: [
