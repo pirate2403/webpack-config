@@ -14,6 +14,7 @@ export interface CreateConfigParams {
 export type WebpackMode = "production" | "development";
 
 export interface WebpackPaths {
+  PUBLIC_PATH: string;
   ENTRY_PATH: string;
   OUTPUT_PATH: string;
   HTML_PATH: string;

@@ -4,7 +4,6 @@ import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import ReactRefreshTypeScript from "react-refresh-typescript";
-import webpack from "webpack";
 import {
   getIsDev,
   getMode,
@@ -30,6 +29,7 @@ export function createWebpackConfigBase(
     mode,
     entry: resolvePath(dirName, paths.ENTRY_PATH),
     output: {
+      publicPath: resolvePath(dirName, paths.PUBLIC_PATH),
       path: resolvePath(dirName, paths.OUTPUT_PATH),
       filename: isDev ? "script/[name].js" : "script/[name].[contenthash].js",
       clean: true,
@@ -50,7 +50,6 @@ export function createWebpackConfigBase(
       }),
       ...(isDev
         ? [
-            new webpack.ProgressPlugin(),
             new ReactRefreshWebpackPlugin(),
             new ForkTsCheckerWebpackPlugin(),
           ]
@@ -88,10 +87,10 @@ export function createWebpackConfigBase(
       },
     },
     ...(isDev && {
-      devtool: "inline-source-map",
+      devtool: "cheap-module-source-map",
       devServer: {
+        historyApiFallback: true,
         static: { directory: resolvePath(dirName, paths.DEV_STATIC_PATH) },
-        compress: true,
         port: port,
         hot: true,
       },
