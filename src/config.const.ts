@@ -1,5 +1,7 @@
 export const ENV_FILE_PATH = ".env";
 
+export const MF_FILE_NAME = "remoteEntry.js";
+
 export const DEFAULT_PATHS = {
   ENTRY_PATH: "src/index.ts",
   OUTPUT_PATH: "build",

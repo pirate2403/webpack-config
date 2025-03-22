@@ -2,12 +2,13 @@ import webpack from "webpack";
 import fs from "fs";
 import { MfPluginParams, MfSharedConfig } from "./config.types";
 import path from "path";
-import { COMMON_DEPENDENCIES } from "./config.const";
+import { COMMON_DEPENDENCIES, MF_FILE_NAME } from "./config.const";
 
-export function createWebpackMfPlugin(
-  params: MfPluginParams,
-  dirName = process.cwd()
+export function createWebpackMfPluginBase(
+  dirName: string,
+  params: MfPluginParams
 ) {
+  const { remotes = {}, filename = MF_FILE_NAME, ...restParams } = params;
   const packageJson = JSON.parse(
     fs.readFileSync(path.resolve(dirName, "package.json"), "utf-8")
   );
@@ -26,6 +27,15 @@ export function createWebpackMfPlugin(
       }),
       {}
     ),
-    ...params,
+    remotes: Object.keys(remotes).reduce<Record<string, string>>(
+      (acc, name) => ({
+        ...acc,
+        [name]: `${name}@${remotes[name]}/${MF_FILE_NAME}`,
+      }),
+      {}
+    ),
+    name: process.env.MF_NAME,
+    filename,
+    ...restParams,
   });
 }

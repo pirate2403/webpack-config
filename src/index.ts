@@ -1,5 +1,4 @@
-export { createWebpackConfig } from "./config";
-export { createWebpackMfPlugin } from "./config.mf-plugin";
+export { prepareConfigCreators } from "./config";
 export type {
   WebpackOverridesConfig,
   CreateConfigParams,
